@@ -37,6 +37,7 @@
     "tape-watch": "^2.2.3"
   },
   "peerDependencies": {
+    "btoa": "^1.1.2",
     "redux": "^3.6.0"
   }
 }
