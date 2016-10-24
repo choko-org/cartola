@@ -1,5 +1,5 @@
 {
-  "name": "servized",
+  "name": "sermo",
   "version": "0.0.1",
   "description": "Dependency injection of Services using the memoization technique.",
   "main": "dist/index.js",
@@ -16,7 +16,7 @@
   ],
   "author": "",
   "license": "MIT",
-  "repository": "choko-org/servized",
+  "repository": "choko-org/sermo",
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "babel-core": "^6.17.0",
