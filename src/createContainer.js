@@ -1,79 +1,71 @@
-import btoa from 'btoa'
+function createContainer (enhancer = null) {
+  let container = []
 
-function createContainer (enhancer) {
   if (typeof enhancer === 'function') {
-    return enhancer(createContainer)
+    return enhancer(createContainer)(container)
   }
 
-  let containerState = []
+  const getContainer = () => container
 
-  const getService = (serviceCreator, ...args) => {
-    const hash = createHash(serviceCreator, ...args)
-
-    const existingService = containerState
-      .filter(serviceExist({ serviceCreator, hash, args }))
-      .shift()
-
-    if (!existingService) {
-      throw new TypeError('Service "' + serviceCreator.name + '" doesn\'t exist.')
-    }
-
-    const { singleton, args: creatorArgs, creator } = existingService
-
-    const finalSingleton = singleton || creator(...creatorArgs)
-    const serviceHash = createHash(creator, ...creatorArgs)
-
-    addToContainer({ hash: serviceHash, finalSingleton })
-
-    return finalSingleton
-  }
-
-  const addService = (serviceCreator, ...args) => {
-    const hash = createHash(serviceCreator, ...args)
-
-    const alreadyExist = containerState
-      .some(serviceExist({ serviceCreator, hash, args }))
-
-    if (alreadyExist) {
-      throw new TypeError('Service with name "' + serviceCreator.name + '" already exists.')
-    }
-
-    const newService = {
-      name: serviceCreator.name,
-      hash,
-      creator: serviceCreator,
-      args,
-      singleton: null,
-    }
-
-    containerState = containerState.concat(newService)
-
+  const registerService = (serviceCreator, ...args) => {
+    const newService = createService(container)(serviceCreator, ...args)
+    container = container.concat(newService)
     return newService
   }
 
-  const getContainer = () => containerState
+  const getService = serviceCreator => {
+    const executedService = executeService(container)(serviceCreator)
 
-  const addToContainer = ({ hash, singleton }) => {
-    containerState = containerState.map(service => {
-      if (service.hash !== hash) {
-        return service
+    container = container.map(service => {
+      if (service.name === serviceCreator.name) {
+        return { ...service, executedService }
       }
-
-      return { ...service, singleton }
+      return service
     })
 
-    return containerState
+    return executedService
   }
 
-  return {
-    addService,
-    getService,
-    getContainer,
-  }
+  return { registerService, getService, getContainer }
 }
 
-export const createHash = (fn, ...args) => btoa(fn.name + fn.toString() + JSON.stringify(args))
-export const serviceExist = ({ serviceCreator, hash, args }) => service => service.hash === hash ||
-  (args.length === 0 && service.name === serviceCreator.name)
-
 export default createContainer
+
+/*
+ * Container Helpers.
+ */
+
+const createService = container => (serviceCreator, ...args) => {
+  const alreadyExist = container.some(serviceExist(serviceCreator))
+
+  if (alreadyExist) {
+    throw new TypeError('Service with name "' + serviceCreator.name + '" already exists.')
+  }
+
+  const newService = {
+    name: serviceCreator.name,
+    creator: serviceCreator,
+    args,
+    executedService: null,
+  }
+
+  return newService
+}
+
+export const executeService = container => serviceCreator => {
+  const existingService = container.filter(serviceExist(serviceCreator)).shift()
+
+  if (!existingService) {
+    throw new TypeError('Service "' + serviceCreator.name + '" doesn\'t exist.')
+  }
+
+  const { executedService, args: creatorArgs, fn: creator } = existingService
+
+  if (executedService) {
+    return executedService
+  }
+
+  return creator(...creatorArgs)
+}
+
+export const serviceExist = serviceCreator => service => service.name === serviceCreator.name
