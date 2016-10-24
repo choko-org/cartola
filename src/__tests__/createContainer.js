@@ -57,3 +57,33 @@ test('Getting a Service', assert => {
 
   assert.end()
 })
+
+test('Compose Containers with different behaviors.', assert => {
+  assert.plan(2)
+
+  const mockProxyEnhancer = createContainer => containerBag => {
+    const container = createContainer()
+    const { getService } = container
+
+    const mockGetServiceWithProxy = serviceCreator => {
+      const service = getService(serviceCreator)
+      const searchProxy = query => {
+        assert.pass('Function call was proxied.')
+        return service.search(query)
+      }
+      return { ...service, search: searchProxy }
+    }
+
+    return { ...container, getService: mockGetServiceWithProxy }
+  }
+
+  const mockServiceCreator = ({ host }) => ({ host, search: query => query })
+
+  const container = createContainer(mockProxyEnhancer)
+  container.defineService(mockServiceCreator, { host: 'local' })
+
+  const service = container.getService(mockServiceCreator)
+
+  assert.isEqual(service.search('choko'), 'choko')
+  assert.end()
+})
