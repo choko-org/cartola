@@ -1,13 +1,13 @@
-# Sermo
+# Cartola
 Dependency Container for universal Services using the Functional Factory Pattern.
 
 ### Basic usage:
 ```js
 import superagentUse from 'superagent-use'
 import superagent from 'superagent'
-import { createContainer } from 'sermo'
+import { createContainer } from 'cartola'
 
-// Service.
+// Universal Service.
 const cmsApi = ({ host, key }) => {
   const request = superagentUse(superagent)
 
@@ -15,7 +15,7 @@ const cmsApi = ({ host, key }) => {
     // Presets the Authorization Barer for all requests.
     req.set('Authorization', 'Barer ' + key)
     return req
-  }
+  })
 
   return request
 }
