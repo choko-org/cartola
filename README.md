@@ -5,7 +5,7 @@ Dependency Container for universal Services using the Functional Factory Pattern
 ```js
 import superagentUse from 'superagent-use'
 import superagent from 'superagent'
-import { createContainer } from 'cartola'
+import createContainer from 'cartola'
 
 // Universal Service.
 const cmsApi = ({ host, key }) => {
