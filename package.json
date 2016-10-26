@@ -1,6 +1,6 @@
 {
   "name": "cartola",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Dependency Container for universal Services using the Functional Factory Pattern.",
   "main": "dist/index.js",
   "scripts": {
