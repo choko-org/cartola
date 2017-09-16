@@ -10,13 +10,13 @@ function createContainer (enhancer = null) {
 
   const getBag = () => containerBag
 
-  const defineService = (serviceCreator, ...args) => {
+  const define = (serviceCreator, ...args) => {
     const newService = createService(containerBag)(serviceCreator, ...args)
     containerBag = containerBag.concat(newService)
     return newService
   }
 
-  const getService = serviceCreator => {
+  const get = serviceCreator => {
     const executedService = executeService(containerBag)(serviceCreator)
 
     // @TODO Shouldn't need to cache more than once.
@@ -31,7 +31,7 @@ function createContainer (enhancer = null) {
     return executedService
   }
 
-  return { defineService, getService, getBag }
+  return { define, get, getBag }
 }
 
 export default createContainer

@@ -3,7 +3,7 @@ import createContainer from '../createContainer'
 
 test('Container\'s API.', assert => {
   const container = createContainer()
-  const expectedApi = ['defineService', 'getService', 'getBag']
+  const expectedApi = ['define', 'get', 'getBag']
   assert.looseEqual(Object.keys(container), expectedApi, 'Api is complete.')
 
   const allAreFunctions = Object.keys(container)
@@ -26,8 +26,8 @@ test('Defining a new Service', assert => {
   const mockServiceCreator = ({ status }) => ({ state: status })
 
   const container = createContainer()
-  const { defineService, getBag } = container
-  const newServiceDefinition = defineService(mockServiceCreator)
+  const { define, getBag } = container
+  const newServiceDefinition = define(mockServiceCreator)
 
   assert.ok(getBag().some(service => service.name === newServiceDefinition.name))
   assert.end()
@@ -41,11 +41,11 @@ test('Getting a Service', assert => {
   }
 
   const container = createContainer()
-  container.defineService(mockServiceCreator, { status: true })
+  container.define(mockServiceCreator, { status: true })
 
-  const serviceOne = container.getService(mockServiceCreator)
-  const serviceTwo = container.getService(mockServiceCreator)
-  const serviceThree = container.getService(mockServiceCreator)
+  const serviceOne = container.get(mockServiceCreator)
+  const serviceTwo = container.get(mockServiceCreator)
+  const serviceThree = container.get(mockServiceCreator)
 
   assert.ok(serviceOne.state)
 
@@ -63,10 +63,10 @@ test('Compose Containers with different behaviors.', assert => {
 
   const mockProxyEnhancer = createContainer => containerBag => {
     const container = createContainer()
-    const { getService } = container
+    const { get } = container
 
     const mockGetServiceWithProxy = serviceCreator => {
-      const service = getService(serviceCreator)
+      const service = get(serviceCreator)
       const searchProxy = query => {
         assert.pass('Function call was proxied.')
         return service.search(query)
@@ -74,15 +74,15 @@ test('Compose Containers with different behaviors.', assert => {
       return { ...service, search: searchProxy }
     }
 
-    return { ...container, getService: mockGetServiceWithProxy }
+    return { ...container, get: mockGetServiceWithProxy }
   }
 
   const mockServiceCreator = ({ host }) => ({ host, search: query => query })
 
   const container = createContainer(mockProxyEnhancer)
-  container.defineService(mockServiceCreator, { host: 'local' })
+  container.define(mockServiceCreator, { host: 'local' })
 
-  const service = container.getService(mockServiceCreator)
+  const service = container.get(mockServiceCreator)
 
   assert.isEqual(service.search('choko'), 'choko')
   assert.end()
