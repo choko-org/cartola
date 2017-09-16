@@ -1,16 +1,24 @@
 # Cartola
 Dependency Container for universal Services using the Functional Factory Pattern.
 
+### Why you should use Cartola?
+1. Dependency container helps to maintain the interoperability in your system.
+2. Service's creation is lazy by default.
+3. You need to import the service creator in order to use, so is easy to find it's source / code / file, it's explicit.
+
 ### Basic usage:
+
 ```js
+// @file: /services/cmsApi.js
+
 import superagentUse from 'superagent-use'
 import superagent from 'superagent'
-import createContainer from 'cartola'
 
 // Universal Service.
 const cmsApi = ({ host, key }) => {
   const request = superagentUse(superagent)
 
+  // Superagent middleware.
   request.use(req => {
     // Presets the Authorization Barer for all requests.
     req.set('Authorization', 'Barer ' + key)
@@ -20,35 +28,41 @@ const cmsApi = ({ host, key }) => {
   return request
 }
 
-// Create the container were Services are going to be stored.
-const container = createContainer()
+export default cmsApi
+```
 
-// Local MongoDB connection.
+```js
+// @file: /index.js
+
+import createContainer from 'cartola'
+import cmsApi from './services/cmsApi'
+
+// Lazy service creation of your REST client.
 container.defineService(cmsApi, {
   host: 'http://rest.example.com',
   key: '89asfudf7g5g75hg6h454ghj64ghj54'
 })
 
-
-function appOne({ getService }) {
+function appOne({ container }) {
   // Api client is created for the first time.
-  const api = getService(cmsApi)
+  const api = container.get(cmsApi)
 
-  // Your App One thingy....
+  // Get the content through the service.
   const content = api.getContent(1231)
 }
 
-function appTwo({ getService }) {
+function appTwo({ container }) {
   // Api client is already created.
-  const api = getService(cmsApi)
+  const api = container.get(cmsApi)
 
-  // Your App Two thingy....
-  const content = api.getContent(1231)
+  // Get the content through the service.
+  const content = api.getContent(1232)
 }
 
-appOne({ getService: container.getService })
+// Here's where you inject the container.
+appOne({ container })
 
 setTimeOut(() => {
-  appTwo({ getService: container.getService })
+  appTwo({ container })
 }, 1000)
 ```

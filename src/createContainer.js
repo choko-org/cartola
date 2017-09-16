@@ -22,10 +22,9 @@ function createContainer (enhancer = null) {
     // @TODO Shouldn't need to cache more than once.
     // Caching executed Service.
     containerBag = containerBag.map(service => {
-      if (service.name === serviceCreator.name) {
-        return { ...service, executedService }
-      }
-      return service
+      if (service.name !== serviceCreator.name) return service
+
+      return { ...service, executedService }
     })
 
     return executedService
