@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+- '7'
+deploy:
+  provider: npm
+  email: choko@choko.org
+  api_key:
+    secure: J1w1P4I30ffb5CcCw8I2wmN4XvLBwb66GeIZZnYfFMpkBT5UhCO7dqA0/itXLv7UsEc4El0O9g6XAbYxR9CG2vaHfBAQ4P15n9A0/MHBnS5TQawkemNISN+772Y1W0Q2zHkr0O97Z5fcJGjokDeIbNPCLKa3x0GWYlHNl1N+QbG/FnKHJfRRZWIajY5hBiAIHLiD0Dn6rkPZduw9/C21tQ4ymWH/dDXi4BgkPvFvFwq7meGbf/7aCJ2oJeKuMG7bFoxlGcUAdkV1lk0ztz3qgEU8E/0vEtJ20FobbXaqJIeou1QMQP3O4JDdscXEaQzugNilh7bpFzCRk10i++RfLuuhdKct7L3WQM2N2bEuRS4Oq9QxZa+jHIjlfchHEDlpHCzdsavXuk7I5HQxlObxcTfuvZey5Fg8ywltLTNaomVXFZggZl/q/BeaAAPUFnBhINcJw2qdCU+VZAKUW6KmhQwOeTsGS8Gvc9y18tbiMh2tqZ1o15lyqa27EPOF1T7GXfrtcAiKj4JtEp5ZdP0kyB03lygwJv8GVJK1wIeyM5Z3zqTe4ryBo8qDDW/9WzFWHdg7Q5lB4m+xZAZS9MUv3agpY0nHrBbOhFlQri9yutxWgAPklbVOADw1wgMjPE7dKP14LSzNY6UsrZJXsXr61h8hKriBquJJfiWa80y6n04=
+  on:
+    tags: true
+    repo: choko-org/cartola
