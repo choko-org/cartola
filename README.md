@@ -1,5 +1,7 @@
 # Cartola
-Dependency Container for universal Services using the Functional Factory Pattern.
+**Dependency Container** for universal Services using the Functional Factory Pattern.
+
+[![Build Status](https://travis-ci.org/choko-org/cartola.svg?branch=master)](https://travis-ci.org/choko-org/cartola)
 
 ### Why you should use Cartola?
 1. Dependency container helps to maintain the interoperability in your system.
