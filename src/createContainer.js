@@ -1,7 +1,7 @@
 import createService from './createService'
 import executeService from './executeService'
 
-function createContainer (enhancer = null) {
+function createContainer (enhancer) {
   let containerBag = []
 
   if (typeof enhancer === 'function') {
