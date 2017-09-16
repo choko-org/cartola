@@ -8,6 +8,14 @@
 2. Service's creation is lazy by default.
 3. You need to import the service creator in order to use, so is easy to find it's source / code / file, it's explicit.
 
+### Install
+
+`npm install --save cartola`
+
+or
+
+`yarn add cartola`
+
 ### Basic usage:
 
 ```js
@@ -65,6 +73,32 @@ function appTwo({ container }) {
 appOne({ container })
 
 setTimeOut(() => {
+  // Here's where you inject the container.
   appTwo({ container })
 }, 1000)
 ```
+
+### Development setup:
+
+**Install**
+
+```sh
+git clone https://github.com/choko-org/cartola.git
+yarn
+```
+
+**Build**
+
+```sh
+yarn build
+```
+
+**Build and Run the tests**
+
+```sh
+yarn test
+```
+
+## License
+
+[MIT](LICENSE)
