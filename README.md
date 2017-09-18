@@ -47,8 +47,11 @@ export default cmsApi
 import createContainer from 'cartola'
 import cmsApi from './services/cmsApi'
 
+// Create the container.
+const container = createContainer()
+
 // Lazy service creation of your REST client.
-container.defineService(cmsApi, {
+container.define(cmsApi, {
   host: 'http://rest.example.com',
   key: '89asfudf7g5g75hg6h454ghj64ghj54'
 })
